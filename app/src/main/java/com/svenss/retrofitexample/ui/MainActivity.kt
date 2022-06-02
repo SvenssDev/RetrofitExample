@@ -2,10 +2,8 @@ package com.svenss.retrofitexample.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.svenss.retrofitexample.R
 import com.svenss.retrofitexample.adapter.CountriesAdapter
 import com.svenss.retrofitexample.databinding.ActivityMainBinding
 import com.svenss.retrofitexample.model.Country
@@ -21,11 +19,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         initViews()
+        collectFlows()
     }
 
     private fun initViews(){
+        viewModel.getCountriesService()
+    }
+
+    private fun collectFlows(){
         with(lifecycleScope){
             with(viewModel){
                 launch { onCallCountriesService.collect{ bindRecycler(it)} }

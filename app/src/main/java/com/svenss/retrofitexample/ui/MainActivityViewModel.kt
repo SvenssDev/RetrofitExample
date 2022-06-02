@@ -19,11 +19,8 @@ class MainActivityViewModel(private val repository: MainRepository): ViewModel()
     private val _onCallCountriesService = MutableSharedFlow<MutableList<Country>>()
     val onCallCountriesService = _onCallCountriesService.asSharedFlow()
 
-    init {
-        getCountriesService()
-    }
 
-    private fun getCountriesService() = CoroutineScope(Dispatchers.IO).launch {
+    fun getCountriesService() = CoroutineScope(Dispatchers.IO).launch {
         val response = repository.getCountries()
 
         withContext(Dispatchers.Main){
