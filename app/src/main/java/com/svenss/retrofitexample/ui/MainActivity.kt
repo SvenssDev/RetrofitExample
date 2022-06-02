@@ -3,8 +3,13 @@ package com.svenss.retrofitexample.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.svenss.retrofitexample.R
+import com.svenss.retrofitexample.adapter.CountriesAdapter
 import com.svenss.retrofitexample.databinding.ActivityMainBinding
+import com.svenss.retrofitexample.model.Country
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +26,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViews(){
-        viewModel.getCountriesService()
+        with(lifecycleScope){
+            with(viewModel){
+                launch { onCallCountriesService.collect{ bindRecycler(it)} }
+            }
+        }
+    }
+
+    private fun bindRecycler(countries: MutableList<Country>){
+        binding.rvCountriesMainActivity.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = CountriesAdapter(countries)
+        }
     }
 }
